@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+hotel_bedroom,bedroom default,model_bedroom,,1,0,0,0
+hotel_bedroom_employee,bedroom_employee,model_bedroom,group_employee,1,1,1,1
