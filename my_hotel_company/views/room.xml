@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="room_action" model="ir.actions.act_window">
+        <field name="name">Room</field>
+        <field name="res_model">bedroom.room</field>
+        <field name="view_mode">tree,form,calendar</field>
+    </record>
+
+    <menuitem name="Rooms" id="room_menu" parent="hotel_base_menu" action="room_action"/>
+    
+    <record id="room_view_form" model="ir.ui.view">
+        <field name="name">Rooms</field>
+        <field name="model">bedroom.room</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="number"/>
+                    <field name="is_clean"/>
+                    <field name="is_available"/>
+                </group>
+            </form>
+        </field>
+    </record>
+    <record id="room_view_tree" model="ir.ui.view">
+        <field name="name">Room Tree</field>
+        <field name="model">bedroom.room</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="number"/>
+                <field name="is_clean"/>
+                <field name="is_available"/>
+            </tree>
+        </field>
+    </record>
+    <record id="room_view_calendar" model="ir.ui.view">
+        <field name="name">Room Calendar</field>
+        <field name="model">bedroom.room</field>
+        <field name="arch" type="xml">
+            <calendar string="Rooms calendar">
+                <field name="number"/>
+                <field name="is_clean"/>
+            </calendar>
+        </field>
+    </record>
+</odoo>

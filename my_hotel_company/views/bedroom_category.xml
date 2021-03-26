@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bedroom_category_action" model="ir.actions.act_window">
+        <field name="name">Bedroom Categories</field>
+        <field name="res_model">bedroom.categ</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Categories" id="bedroom_category_menu" parent="hotel_base_menu" action="bedroom_category_action"/>
+
+    <record id="bedroom_category_view_form" model="ir.ui.view">
+        <field name="name">Bedroom Category Form</field>
+        <field name="model">bedroom.categ</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                </group>
+            </form>
+        </field>
+    </record>
+    
+    <record id="bedroom_category_view_tree" model="ir.ui.view">
+        <field name="name">Bedroom Category Tree</field>
+        <field name="model">bedroom.categ</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>  
+
+</odoo>

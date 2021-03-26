@@ -1,7 +1,9 @@
 import time
+from datetime import datetime
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 from datetime import datetime
+
 
 class BookingArchive(models.AbstractModel):
     _name="base.archive"
@@ -19,22 +21,23 @@ class Bedroom(models.Model):
     _inherit = ["base.archive"]
     _description = "Bedroom of the hotel"
 
-    _sql_constraints = [('number_uniq', 'UNIQUE (number_room)','Choisissez le numéro dans la liste')]
-    number_room = fields.Selection([("1","1"),("2","2"),("3","3"),("4","4"),("5","5"),("6","6"),("7","7"),("8","8"),("9","9"),("10","10")],
-    required=True)
-    number_person = fields.Integer("Nb of persons", required=True) 
+    _sql_constraints = [('number_pers_sup_0', 'CHECK(number_person>0)', 'Nombre de personnes supérieur à 0.')]
+    room_id = fields.Many2many("bedroom.room","new_bedroom_id")
+    number_room = fields.Integer("number_of_room", compute="_compute_number",store=True, readonly=True)
+    number_person = fields.Integer("Nb of persons", required=True, ) 
     date_start = fields.Datetime("Date start", required=True)
     date_end = fields.Datetime("Date end", required=True)
     cost_price = fields.Float("Price", digits="Bedroom Price")
     nights_price = fields.Float("Price of trip", compute="_compute_price", store=True, readonly=True )
     retail_price= fields.Monetary("Night Price")
-    is_clean = fields.Boolean("Is clean", default=True)
     is_breakfast = fields.Boolean("Have breakfast", default=True)
     is_children = fields.Boolean("is there children", default=False) 
     contact_id = fields.Many2one('res.partner')
     currency_id = fields.Many2one("res.currency", string="Currency")
     category_id = fields.Many2one("bedroom.categ")
+    date_of_booking = fields.Datetime("Date of booking", readonly=True, compute="_compute_date", store=True)
     note = fields.Text("Note")
+    
 
     @api.constrains("date_start")
     def _check_date_start(self):
@@ -67,9 +70,32 @@ class Bedroom(models.Model):
                     record.nights_price = 0  
             else: 
                 record.nights_price = 0
+    @api.depends("room_id","number_room")
+    def _compute_number(self):
+        for record in self:
+            if record.room_id :
+                for room in record.room_id:
+                    record.number_room = room #To do avoir tous les numéros d'une liste
+    @api.depends("date_of_booking","date_start","date_end")
+    def _compute_date(self):
+        for record in self:
+            if record.date_start and record.date_end:
+                record.date_of_booking = datetime.now()
 
-    
+    def find_bedroom(self):
+        domain = ["|", "&",("number_room","ilike","Number of room"),("date_start", "ilike", "Date of start"), ("category_id.name", "ilike", "Category"), ("contact_id.name", "ilike", "client")]
+        bedroom_search = self.search(domain)
+
 class ResPartner(models.Model):
     _inherit = "res.partner"
     bedroom_id = fields.One2many("bedroom","contact_id", string="Booking")
 
+class Room(models.Model):
+    _name="bedroom.room"
+    _description="Room to reserve for a trip"
+
+    number = fields.Integer("Room's number", required=True)
+    bedroom_id=fields.Many2many("bedroom","new_room_id")
+    is_clean = fields.Boolean("Is clean", default=True)
+    is_available = fields.Boolean("Is available", default=True)
+    
