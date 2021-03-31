@@ -3,3 +3,5 @@ hotel_bedroom,bedroom default,model_bedroom,,1,0,0,0
 hotel_bedroom_employee,bedroom_employee,model_bedroom,group_employee,1,1,1,1
 hotel_bedroom_category,bedroom_category,model_bedroom_categ,,1,1,1,1
 hotel_bedroom_room,bedroom_room,model_bedroom_room,,1,1,1,1
+hotel_bedroom_direction,bedroom_direction,model_bedroom,group_marketing_direction,1,1,1,1
+hotel_bedroom_status,bedroom_status,model_booking_state,group_employee,1,1,1,1

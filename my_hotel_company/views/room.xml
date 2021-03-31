@@ -17,6 +17,7 @@
                     <field name="number"/>
                     <field name="is_clean"/>
                     <field name="is_available"/>
+                    <field name="hotel_id"/>
                 </group>
             </form>
         </field>
@@ -30,6 +31,7 @@
                 <field name="number"/>
                 <field name="is_clean"/>
                 <field name="is_available"/>
+                <field name="hotel_id"/>
             </tree>
         </field>
     </record>

@@ -27,6 +27,6 @@
         <field name="domain">["|",("category_id","=","direction"),("category_id","=","AG")]</field>
     </record>
 
-    <menuitem name="Secret" id="secret_menu" parent="hotel_base_menu" action="bedroom_direction_action"/>
-     <menuitem id="new_client_menu" name="new_client_menu" parent="hotel_base_menu" action="action_all_contacts"/>
+    <menuitem name="Direction" id="secret_menu" parent="hotel_base_menu" action="bedroom_direction_action"/>
+     <menuitem id="new_client_menu" name="Clients" parent="hotel_base_menu" action="action_all_contacts"/>
 </odoo>

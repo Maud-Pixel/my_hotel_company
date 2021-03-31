@@ -23,7 +23,7 @@ class Bedroom(models.Model):
 
     _sql_constraints = [('number_pers_sup_0', 'CHECK(number_person>0)', 'Nombre de personnes supérieur à 0.')]
     room_id = fields.Many2many("bedroom.room","new_bedroom_id")
-    number_room = fields.Integer("number_of_room", compute="_compute_number",store=True, readonly=True)
+    number_room = fields.Char("number_of_room", compute="_compute_number",store=True, readonly=True)
     number_person = fields.Integer("Nb of persons", required=True, ) 
     date_start = fields.Datetime("Date start", required=True)
     date_end = fields.Datetime("Date end", required=True)
@@ -65,17 +65,20 @@ class Bedroom(models.Model):
                 number_day_end = record.date_end
                 total_night = (number_day_end - number_day_start).days
                 if record.cost_price:
-                    record.nights_price = record.cost_price * total_night
+                    record.nights_price = round((record.cost_price * total_night),1)
                 else:
                     record.nights_price = 0  
             else: 
                 record.nights_price = 0
     @api.depends("room_id","number_room")
     def _compute_number(self):
+        list_number =""
         for record in self:
             if record.room_id :
                 for room in record.room_id:
-                    record.number_room = room #To do avoir tous les numéros d'une liste
+                    list_number += str(room.number) 
+                record.number_room = list_number
+
     @api.depends("date_of_booking","date_start","date_end")
     def _compute_date(self):
         for record in self:
@@ -98,4 +101,17 @@ class Room(models.Model):
     bedroom_id=fields.Many2many("bedroom","new_room_id")
     is_clean = fields.Boolean("Is clean", default=True)
     is_available = fields.Boolean("Is available", default=True)
+    hotel_id = fields.Many2one("hotel")
     
+class BookingState(models.Model):
+    _name="booking.state"
+    _order="sequence,name"
+
+    name=fields.Char()
+    sequence=fields.Integer()
+    booking_status=fields.Selection([('booked',"Booked"),('deposit',"Deposit"),('allpayed','Allpayed')],'State',default="booked")
+
+    @api.model
+    def _default_status_booking(self):
+        State = self.env['booking.state']
+        return State.search([], limit=1)
