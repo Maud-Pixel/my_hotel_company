@@ -2,14 +2,9 @@ from odoo import http, exceptions, models
 from odoo.http import request
 
 class Main(http.Controller):
-    @http.route('/hotel_company/booking', type="http", auth="none")
+    @http.route('/hotel_company/booking', type="http", auth="user", website=True)
     def reserve(self):
-        reservations = request.env["bedroom"].sudo().search([])
-        html_result = "<html><body><ul>"
-        for reservation in reservations:
-            html_result +="<li> Chambre n°%s au nom de %s</li>" % (reservation.room_id, reservation.contact_id.name)
-        html_result += "</ul></body></html>"
-        return html_result
+        return request.render("my_hotel_company.hotel_page", {"hotels": request.env['hotel'].search([]),})
 
     @http.route('/hotel_company/booking/json', type="json", auth="none")
     def reserve_json(self):
@@ -54,3 +49,4 @@ class Main(http.Controller):
     @http.route("/hotel_company/booking_details/<model('bedroom'):room>", type="http", auth="none")
     def reserve_details_path(self,room):
         return self.reserve_details(room.id)
+

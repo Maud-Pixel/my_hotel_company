@@ -17,8 +17,9 @@
     "views/bedroom_category.xml",
     "views/account.xml",
     "views/clients.xml",
-    "views/hotel_web.xml",
-    "views/hotel.xml"
+    "views/web/hotel_web.xml",
+    "views/hotel.xml",
+    "views/web/templates.xml"
     ],
 "demo": ["demo.xml"],
 "images": "my_hotel_company/static/description/icon.png"

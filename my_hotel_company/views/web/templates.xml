@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="hotel_page">
+        <t t-call="website.layout">
+        </t>
+    </template>
+</odoo>
